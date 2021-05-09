@@ -1,18 +1,17 @@
 import { Injectable } from "@angular/core";
 import { HttpClient, HttpErrorResponse } from "@angular/common/http";
-import { FbAuthResponse, User } from "src/app/shared/interfaces";
+import { FbAuthResponse, User } from "../../../shared/interfaces";
 import { Observable, Subject, throwError } from "rxjs";
 import { environment } from "../../../../environments/environment";
 import { catchError, tap } from "rxjs/operators";
 
-@Injectable({providedIn: 'root'})
+@Injectable({ providedIn: "root" })
 export class AuthService {
   public error$: Subject<string> = new Subject<string>();
 
   constructor(private http: HttpClient) {}
 
   get token(): string {
-    debugger;
     const expDate = new Date(localStorage.getItem("fb-token-exp"));
     if (new Date() > expDate) {
       this.logout();
@@ -22,6 +21,7 @@ export class AuthService {
   }
 
   login(user: User): Observable<any> {
+    user.returnSecureToken = true;
     return this.http
       .post(
         `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${environment.apiKey}`,
@@ -49,7 +49,7 @@ export class AuthService {
         this.error$.next("Неверный пароль");
         break;
       case "EMAIL_NOT_FOUND":
-        this.error$.next("email не найден");
+        this.error$.next("Такого email нет");
         break;
     }
 
@@ -58,7 +58,6 @@ export class AuthService {
 
   private setToken(response: FbAuthResponse | null) {
     if (response) {
-      console.log("setToken")
       const expDate = new Date(
         new Date().getTime() + +response.expiresIn * 1000
       );

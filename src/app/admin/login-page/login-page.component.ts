@@ -1,8 +1,8 @@
 import { Component, OnInit } from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
-import { ActivatedRoute, Params, Router } from "@angular/router";
-import { User } from "src/app/shared/interfaces";
+import { User } from "../../shared/interfaces";
 import { AuthService } from "../shared/services/auth.service";
+import { ActivatedRoute, Params, Router } from "@angular/router";
 
 @Component({
   selector: "app-login-page",
@@ -25,7 +25,7 @@ export class LoginPageComponent implements OnInit {
       if (params["loginAgain"]) {
         this.message = "Пожалуйста, введите данные";
       } else if (params["authFailed"]) {
-        this.message = "Сессия истекла. Введите данные заново.";
+        this.message = "Сессия истекла. Введите данные заного";
       }
     });
 
@@ -39,7 +39,6 @@ export class LoginPageComponent implements OnInit {
   }
 
   submit() {
-    console.log("Form", this.form);
     if (this.form.invalid) {
       return;
     }
@@ -61,6 +60,5 @@ export class LoginPageComponent implements OnInit {
         this.submitted = false;
       }
     );
-    console.log('Submitted')
   }
 }
